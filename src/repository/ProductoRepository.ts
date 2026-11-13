@@ -3,7 +3,9 @@ import { Producto } from "../entity/Producto.js";
 
 
 export class ProductoRepository {
-    private repository = AppDataSource.getRepository(Producto);
+    private get repository() {
+        return AppDataSource.getRepository(Producto);
+    }
 
     async findAll(): Promise<Producto[]> {
         return await this.repository.find({
@@ -29,13 +31,22 @@ export class ProductoRepository {
         return await this.repository.save(producto);
     }
 
-    async create(productoData: Partial<Producto>): Promise<Producto> {
-        const producto = this.repository.create(productoData);
+    async create(productoData: any): Promise<Producto> {
+        const data: Partial<Producto> = {
+            ...productoData,
+            categoriaId: productoData.categoriaId ?? productoData.categoria_id
+        };
+        const producto = this.repository.create(data);
         return await this.repository.save(producto);
     }
 
-    async update(id: number, productoData: Partial<Producto>): Promise<Producto | null> {
-        await this.repository.update(id, productoData);
+    async update(id: number, productoData: any): Promise<Producto | null> {
+        const data = { ...productoData };
+        if (data.categoria_id !== undefined && data.categoriaId === undefined) {
+            data.categoriaId = data.categoria_id;
+            delete data.categoria_id;
+        }
+        await this.repository.update(id, data);
         return await this.findById(id);
     }
 

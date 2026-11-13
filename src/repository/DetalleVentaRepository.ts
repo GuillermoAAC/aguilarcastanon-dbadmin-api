@@ -2,7 +2,9 @@ import { AppDataSource } from "../config/data-source.js";
 import { DetalleVenta } from "../entity/DetalleVenta.js";
 
 export class DetalleVentaRepository {
-    private repository = AppDataSource.getRepository(DetalleVenta);
+    private get repository() {
+        return AppDataSource.getRepository(DetalleVenta);
+    }
 
     async findAll(): Promise<DetalleVenta[]> {
         return await this.repository.find({

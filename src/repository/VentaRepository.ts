@@ -3,7 +3,9 @@ import { Venta } from "../entity/Venta.js";
 
 
 export class VentaRepository {
-    private repository = AppDataSource.getRepository(Venta);
+    private get repository() {
+        return AppDataSource.getRepository(Venta);
+    }
 
     async findAll(): Promise<Venta[]> {
         return await this.repository.find({

@@ -3,7 +3,9 @@ import { Categoria } from "../entity/Categoria.js";
 
 
 export class CategoriaRepository {
-    private repository = AppDataSource.getRepository(Categoria);
+    private get repository() {
+        return AppDataSource.getRepository(Categoria);
+    }
 
     async findAll(): Promise<Categoria[]> {
         return await this.repository.find({

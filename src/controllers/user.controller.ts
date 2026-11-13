@@ -26,7 +26,7 @@ export const getUser = (req: Request, res: Response) => {
     }
     res.json({
         "status":"success",
-        "date":{
+        "data":{
             "user": user
         }
     });
